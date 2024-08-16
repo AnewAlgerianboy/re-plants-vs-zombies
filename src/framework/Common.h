@@ -26,11 +26,12 @@
 
 #ifndef __cpp_lib_unreachable
 [[noreturn]] inline void unreachable() {
-#if defined(_MSC_VER) && !defined(__clang__) // MSVC
-    __assume(false);
-#else
-    __builtin_unreachable();
-#endif
+    #if defined(_MSC_VER) && !defined(__clang__) // MSVC
+        __assume(false);
+    #else
+        // If not using MSVC, define unreachable as a no-op
+        do {} while(0);
+    #endif
 }
 #endif // __cpp_lib_unreachable
 
@@ -38,7 +39,7 @@
 #define strcasecmp _stricmp
 #define strncasecmp _strnicmp
 #else
-#define unreachable __builtin_unreachable
+#define unreachable do {} while(0)
 #endif
 
 #define _MAX_PATH 260
